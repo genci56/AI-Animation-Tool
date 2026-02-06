@@ -1,0 +1,9 @@
+# Ignore local development files
+.agents/
+skills/
+.whisper/
+export/
+public/uploads/
+create-props.js
+*.mjs
+nul
