@@ -1,0 +1,346 @@
+================================================================================
+                    AI ANIMATION TOOL - SETUP & USER GUIDE
+================================================================================
+
+This guide will help you install, configure, and use the AI Animation Tool
+to create stunning motion graphics videos using AI-generated code.
+
+================================================================================
+                              TABLE OF CONTENTS
+================================================================================
+
+1. Prerequisites
+2. Installation
+3. Configuration
+4. Running Locally
+5. Deploying to Vercel
+6. Using the Application
+7. Creating Animations with Prompts
+8. Using Example Showcases
+9. Exporting Videos
+10. Troubleshooting
+
+================================================================================
+                              1. PREREQUISITES
+================================================================================
+
+Before you begin, make sure you have the following installed:
+
+[ ] Node.js (v18 or higher)
+    Download: https://nodejs.org/
+
+[ ] Git
+    Download: https://git-scm.com/
+
+[ ] A code editor (VS Code recommended)
+    Download: https://code.visualstudio.com/
+
+[ ] An Anthropic API Key (for AI generation)
+    Get one at: https://console.anthropic.com/
+
+================================================================================
+                              2. INSTALLATION
+================================================================================
+
+Step 1: Clone the Repository
+----------------------------
+Open your terminal and run:
+
+    git clone https://github.com/genci56/AI-Animation-Tool.git
+    cd AI-Animation-Tool
+
+Step 2: Install Dependencies
+----------------------------
+Run the following command to install all required packages:
+
+    npm install
+
+This may take a few minutes as it installs Remotion, Next.js, and other
+dependencies.
+
+================================================================================
+                              3. CONFIGURATION
+================================================================================
+
+Step 1: Create Environment File
+-------------------------------
+Copy the example environment file:
+
+    - On Windows:  copy .env.example .env
+    - On Mac/Linux: cp .env.example .env
+
+Step 2: Add Your API Key
+------------------------
+Open the .env file in your code editor and add your Anthropic API key:
+
+    ANTHROPIC_API_KEY=sk-ant-your-api-key-here
+
+Step 3: (Optional) Configure Lambda Rendering
+---------------------------------------------
+If you want to use AWS Lambda for server-side rendering, you'll also need:
+
+    AWS_ACCESS_KEY_ID=your-aws-access-key
+    AWS_SECRET_ACCESS_KEY=your-aws-secret-key
+    REMOTION_AWS_REGION=us-east-1
+
+Note: Lambda rendering is optional. The app works without it using
+client-side rendering.
+
+================================================================================
+                           4. RUNNING LOCALLY
+================================================================================
+
+Start the Development Server
+----------------------------
+Run the following command:
+
+    npm run dev
+
+The application will start at:
+
+    http://localhost:3000
+
+Open this URL in your web browser to use the application.
+
+Available Pages:
+- http://localhost:3000           - Landing page
+- http://localhost:3000/generate  - Animation generator
+- http://localhost:3000/code-examples - Pre-built showcases
+
+================================================================================
+                         5. DEPLOYING TO VERCEL
+================================================================================
+
+Step 1: Create a Vercel Account
+-------------------------------
+Sign up at: https://vercel.com/
+
+Step 2: Install Vercel CLI (Optional)
+-------------------------------------
+    npm install -g vercel
+
+Step 3: Deploy via GitHub (Recommended)
+---------------------------------------
+1. Push your code to GitHub
+2. Go to https://vercel.com/new
+3. Import your GitHub repository
+4. Configure environment variables:
+   - Click "Environment Variables"
+   - Add: ANTHROPIC_API_KEY = your-api-key
+5. Click "Deploy"
+
+Step 4: Deploy via CLI (Alternative)
+------------------------------------
+Run in your project directory:
+
+    vercel --prod
+
+Follow the prompts to link your project and deploy.
+
+Your site will be live at: https://your-project.vercel.app
+
+================================================================================
+                        6. USING THE APPLICATION
+================================================================================
+
+The AI Animation Tool has three main sections:
+
+A) Landing Page (/)
+-------------------
+- Enter a quick prompt to generate an animation
+- Click "Generate" to create your animation
+
+B) Generate Page (/generate)
+----------------------------
+- Full-featured animation workspace
+- Enter detailed prompts
+- Preview animations in real-time
+- Adjust settings and export
+
+C) Code Examples (/code-examples)
+---------------------------------
+- Browse pre-built animation showcases
+- Preview and learn from example code
+- Use as starting points for your own animations
+
+================================================================================
+                   7. CREATING ANIMATIONS WITH PROMPTS
+================================================================================
+
+How to Write Good Prompts
+-------------------------
+Be specific about what you want. Include:
+- Animation type (text reveal, logo animation, infographic, etc.)
+- Colors and style (modern, minimal, vibrant, dark theme, etc.)
+- Motion style (smooth, bouncy, fast, elegant, etc.)
+- Content (what text, shapes, or elements to include)
+
+Example Prompts:
+----------------
+
+Simple:
+"A bouncing ball animation with a blue gradient background"
+
+Detailed:
+"Create a modern text reveal animation for the word 'HELLO' with each
+letter sliding in from the bottom with a spring bounce effect. Use a
+dark background (#0a0a0a) and white text with a subtle glow."
+
+Complex:
+"Design a 5-scene product showcase video:
+Scene 1: Logo fade in with particles
+Scene 2: Product features with animated icons
+Scene 3: Statistics with animated counters
+Scene 4: Customer testimonials with sliding cards
+Scene 5: Call-to-action with pulsing button"
+
+Tips for Best Results:
+----------------------
+- Start simple and iterate
+- Mention specific colors using hex codes (#FF5733)
+- Reference animation styles (spring physics, easing, fade, slide)
+- Specify duration if needed (3 seconds, 90 frames at 30fps)
+
+================================================================================
+                       8. USING EXAMPLE SHOWCASES
+================================================================================
+
+Available Showcases:
+--------------------
+1. The Creator's Loop
+   - 10-scene motion graphics about content creation workflow
+   - Modern SaaS aesthetic with dark theme
+   - Duration: 30 seconds
+
+2. Multi-Scene Showcase
+   - 4-scene animation demonstration
+   - Typewriter effects, spring animations
+   - Duration: 12 seconds
+
+3. Apple-Style Showcase
+   - Elegant product-style animations
+   - Clean, minimal design
+   - Duration: 12 seconds
+
+4. Advanced Showcase
+   - Complex animation techniques
+   - Multiple visual effects
+
+How to Use Showcases:
+---------------------
+1. Go to /code-examples
+2. Select a showcase from the dropdown
+3. Click "Preview" to see the animation
+4. Study the code to learn techniques
+5. Modify and create your own variations
+
+================================================================================
+                          9. EXPORTING VIDEOS
+================================================================================
+
+Method 1: Browser Export (Simple)
+---------------------------------
+1. Generate or preview your animation
+2. Click the "Export" or "Render" button
+3. Wait for rendering to complete
+4. Download the MP4 file
+
+Method 2: Command Line Export (Advanced)
+----------------------------------------
+For higher quality or custom settings:
+
+1. Create a props file with your animation code:
+
+   node create-props.js
+
+2. Render using Remotion CLI:
+
+   npx remotion render DynamicComp output.mp4 --props=./props.json
+
+3. Custom options:
+
+   npx remotion render DynamicComp output.mp4 \
+     --props=./props.json \
+     --codec=h264 \
+     --quality=100 \
+     --frames=0-899
+
+Export Settings:
+----------------
+- Resolution: 1920x1080 (Full HD)
+- Frame Rate: 30 fps
+- Codec: H.264 (MP4)
+- Quality: Adjustable (0-100)
+
+================================================================================
+                          10. TROUBLESHOOTING
+================================================================================
+
+Problem: "No code provided" error in video
+------------------------------------------
+Solution: Make sure the animation code is being passed correctly.
+Check that your props file contains valid code.
+
+Problem: API rate limit or credit errors
+----------------------------------------
+Solution: Check your Anthropic API credits at console.anthropic.com
+Add more credits or wait for rate limits to reset.
+
+Problem: Build fails on Vercel
+------------------------------
+Solution:
+1. Check that all environment variables are set
+2. Ensure .vercelignore doesn't exclude needed files
+3. Check build logs for specific errors
+
+Problem: Animation not rendering
+--------------------------------
+Solution:
+1. Check browser console for errors (F12)
+2. Verify the code compiles without syntax errors
+3. Try a simpler animation first
+
+Problem: Slow performance
+-------------------------
+Solution:
+1. Reduce animation complexity
+2. Lower the frame count
+3. Use simpler effects (avoid too many particles)
+
+Getting Help:
+-------------
+- Check the GitHub Issues: https://github.com/genci56/AI-Animation-Tool/issues
+- Review Remotion docs: https://www.remotion.dev/docs
+- Anthropic API docs: https://docs.anthropic.com
+
+================================================================================
+                              QUICK REFERENCE
+================================================================================
+
+Start Development Server:     npm run dev
+Build for Production:         npm run build
+Deploy to Vercel:            vercel --prod
+Render Video (CLI):          npx remotion render DynamicComp output.mp4
+
+Default URLs:
+- Local:      http://localhost:3000
+- Production: https://my-ai-video-seven.vercel.app
+
+Key Files:
+- .env                    - Environment variables (API keys)
+- src/examples/code/      - Animation showcase examples
+- src/remotion/           - Remotion components and compiler
+- src/app/api/generate/   - AI generation endpoint
+
+================================================================================
+                                  CREDITS
+================================================================================
+
+Built with:
+- Next.js 16
+- Remotion 4
+- Anthropic Claude API
+- Tailwind CSS
+- TypeScript
+
+================================================================================
