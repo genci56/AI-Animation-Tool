@@ -43,7 +43,7 @@ export function LandingPageInput({
   showCodeExamplesLink = false,
 }: LandingPageInputProps) {
   const [prompt, setPrompt] = useState("");
-  const [model, setModel] = useState<ModelId>("claude-sonnet-4-20250514");
+  const [model, setModel] = useState<ModelId>("claude-3-5-sonnet-20241022");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -17,10 +17,18 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
         defaultProps={{ code: defaultCode }}
-        calculateMetadata={({ props }) => ({
-          durationInFrames: props.durationInFrames as number,
-          fps: props.fps as number,
-        })}
+        calculateMetadata={({ props }) => {
+          let duration = props.durationInFrames as number;
+          const fps = props.fps as number;
+
+          // Use audio duration if voiceover is provided
+          const voiceover = props.voiceover as { durationMs?: number } | undefined;
+          if (voiceover?.durationMs) {
+            duration = Math.ceil((voiceover.durationMs / 1000) * fps);
+          }
+
+          return { durationInFrames: duration, fps };
+        }}
       />
       <Composition
         id="HeroBanner"

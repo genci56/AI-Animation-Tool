@@ -7,6 +7,10 @@ import { fallingSpheresExample } from "./falling-spheres";
 import { goldPriceChartExample } from "./gold-price-chart";
 import { typewriterHighlightExample } from "./typewriter-highlight";
 import { wordCarouselExample } from "./word-carousel";
+import { multiSceneShowcaseExample } from "./multi-scene-showcase";
+import { advancedShowcaseExample } from "./advanced-showcase";
+import { appleStyleShowcaseExample } from "./apple-style-showcase";
+import { creatorLoopShowcase } from "./creator-loop-showcase";
 
 export interface RemotionExample {
   id: string;
@@ -15,10 +19,14 @@ export interface RemotionExample {
   code: string;
   durationInFrames: number;
   fps: number;
-  category: "Text" | "Charts" | "Animation" | "3D" | "Other";
+  category: "Text" | "Charts" | "Animation" | "3D" | "Showcase" | "Other";
 }
 
 export const examples: RemotionExample[] = [
+  creatorLoopShowcase,
+  appleStyleShowcaseExample,
+  advancedShowcaseExample,
+  multiSceneShowcaseExample,
   textRotationExample,
   histogramExample,
   progressBarExample,

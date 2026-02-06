@@ -4,16 +4,22 @@ import {
   delayRender,
   continueRender,
   AbsoluteFill,
+  Audio,
 } from "remotion";
 import { compileCode } from "./compiler";
+import { CaptionOverlay } from "./CaptionOverlay";
+import type { Voiceover, CaptionConfig, CaptionsData } from "../types/voiceover";
 
 interface DynamicCompProps {
   code: string;
+  voiceover?: Voiceover;
+  captionConfig?: CaptionConfig;
+  captions?: CaptionsData;
   [key: string]: unknown;
 }
 
 export const DynamicComp: React.FC = () => {
-  const { code } = getInputProps() as DynamicCompProps;
+  const { code, voiceover, captionConfig, captions } = getInputProps() as DynamicCompProps;
 
   const [handle] = useState(() => delayRender("Compiling code..."));
   const [Component, setComponent] = useState<React.ComponentType | null>(null);
@@ -77,5 +83,15 @@ export const DynamicComp: React.FC = () => {
     return null;
   }
 
-  return <Component />;
+  return (
+    <>
+      <Component />
+      {/* Render audio track if voiceover is provided */}
+      {voiceover?.audioUrl && <Audio src={voiceover.audioUrl} />}
+      {/* Render captions overlay if enabled */}
+      {captionConfig?.enabled && captions && (
+        <CaptionOverlay captionConfig={captionConfig} captions={captions} />
+      )}
+    </>
+  );
 };

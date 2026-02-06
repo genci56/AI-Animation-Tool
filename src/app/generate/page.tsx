@@ -3,11 +3,15 @@
 import { useState, useCallback, useEffect, useRef, Suspense } from "react";
 import type { NextPage } from "next";
 import { useSearchParams } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, PanelRightClose, PanelRightOpen } from "lucide-react";
 import { CodeEditor } from "../../components/CodeEditor";
 import { AnimationPlayer } from "../../components/AnimationPlayer";
 import { PageLayout } from "../../components/PageLayout";
 import { ChatSidebar, type ChatSidebarRef } from "../../components/ChatSidebar";
+import { VoiceoverPanel } from "../../components/VoiceoverPanel";
+import { CaptionsEditor } from "../../components/CaptionsEditor";
+import { ScriptEditor } from "../../components/ScriptEditor";
+import { Button } from "../../components/ui/button";
 import type { StreamPhase, GenerationErrorType } from "../../types/generation";
 import { examples } from "../../examples/code";
 import { useAnimationState } from "../../hooks/useAnimationState";
@@ -17,6 +21,12 @@ import type {
   AssistantMetadata,
   ErrorCorrectionContext,
 } from "../../types/conversation";
+import type {
+  Voiceover,
+  Script,
+  CaptionConfig,
+  CaptionsData,
+} from "../../types/voiceover";
 
 const MAX_CORRECTION_ATTEMPTS = 3;
 
@@ -66,6 +76,18 @@ function GeneratePageContent() {
 
   // Sidebar collapse state
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isRightSidebarCollapsed, setIsRightSidebarCollapsed] = useState(false);
+
+  // Voiceover/Script state
+  const [voiceover, setVoiceover] = useState<Voiceover | null>(null);
+  const [script, setScript] = useState<Script>({ scenes: [] });
+  const [captionConfig, setCaptionConfig] = useState<CaptionConfig>({
+    enabled: false,
+    style: "bottom",
+    fontSize: 48,
+    highlightColor: "#FFFF00",
+  });
+  const [captions, setCaptions] = useState<CaptionsData | null>(null);
 
   const { code, Component, error: compilationError, isCompiling, setCode, compileCode } =
     useAnimationState(examples[0]?.code || "");
@@ -213,6 +235,14 @@ function GeneratePageContent() {
     }
   }, [initialPrompt, hasAutoStarted]);
 
+  // Update duration when voiceover changes
+  useEffect(() => {
+    if (voiceover?.durationMs) {
+      const newDuration = Math.ceil((voiceover.durationMs / 1000) * fps);
+      setDurationInFrames(newDuration);
+    }
+  }, [voiceover, fps]);
+
   return (
     <PageLayout showLogoAsLink>
       <div className="flex-1 flex min-w-0 overflow-hidden">
@@ -265,9 +295,70 @@ function GeneratePageContent() {
                 errorType={generationError?.type || "compilation"}
                 code={code}
                 onRuntimeError={handleRuntimeError}
+                voiceover={voiceover}
+                captionConfig={captionConfig}
+                captions={captions}
               />
             </div>
           </div>
+        </div>
+
+        {/* Right Sidebar - Voiceover & Script */}
+        <div
+          className={`flex flex-col bg-background border-l border-border transition-all duration-300 shrink-0 ${
+            isRightSidebarCollapsed ? "w-12" : "w-[300px]"
+          }`}
+        >
+          {isRightSidebarCollapsed ? (
+            <div className="flex justify-center px-4 pt-3">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setIsRightSidebarCollapsed(false)}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <PanelRightOpen className="w-4 h-4" />
+              </Button>
+            </div>
+          ) : (
+            <>
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <h2 className="text-sm font-medium text-muted-foreground">
+                  Media
+                </h2>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={() => setIsRightSidebarCollapsed(true)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <PanelRightClose className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {/* Panels */}
+              <div className="flex-1 overflow-y-auto">
+                <VoiceoverPanel
+                  voiceover={voiceover}
+                  onVoiceoverChange={setVoiceover}
+                  captionConfig={captionConfig}
+                  onCaptionConfigChange={setCaptionConfig}
+                  onCaptionsChange={setCaptions}
+                  onScriptChange={setScript}
+                />
+                <CaptionsEditor
+                  captions={captions}
+                  onCaptionsChange={setCaptions}
+                  audioDurationMs={voiceover?.durationMs}
+                />
+                <ScriptEditor
+                  script={script}
+                  onScriptChange={setScript}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </PageLayout>

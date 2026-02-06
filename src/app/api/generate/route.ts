@@ -281,7 +281,7 @@ interface GenerateResponse {
 export async function POST(req: Request) {
   const {
     prompt,
-    model = "claude-sonnet-4-20250514",
+    model = "claude-3-5-sonnet-20241022",
     currentCode,
     conversationHistory = [],
     isFollowUp = false,
@@ -314,7 +314,7 @@ export async function POST(req: Request) {
   if (!isFollowUp) {
     try {
       const validationResult = await generateObject({
-        model: anthropic("claude-sonnet-4-20250514"),
+        model: anthropic("claude-3-5-sonnet-20241022"),
         system: VALIDATION_PROMPT,
         prompt: `User prompt: "${prompt}"`,
         schema: z.object({ valid: z.boolean() }),
@@ -340,7 +340,7 @@ export async function POST(req: Request) {
   let detectedSkills: SkillName[] = [];
   try {
     const skillResult = await generateObject({
-      model: anthropic("claude-sonnet-4-20250514"),
+      model: anthropic("claude-3-5-sonnet-20241022"),
       system: SKILL_DETECTION_PROMPT,
       prompt: `User prompt: "${prompt}"`,
       schema: z.object({

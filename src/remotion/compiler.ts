@@ -9,6 +9,8 @@ import {
   spring,
   Sequence,
   Img,
+  Audio,
+  Easing,
 } from "remotion";
 import * as RemotionShapes from "@remotion/shapes";
 import { Lottie } from "@remotion/lottie";
@@ -24,6 +26,7 @@ import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
 import { flip } from "@remotion/transitions/flip";
 import { clockWipe } from "@remotion/transitions/clock-wipe";
+import * as LucideIcons from "lucide-react";
 
 export interface CompilationResult {
   Component: React.ComponentType | null;
@@ -104,6 +107,8 @@ export function compileCode(code: string): CompilationResult {
       spring,
       Sequence,
       Img,
+      Audio,
+      Easing,
     };
 
     const wrappedCode = `${transpiled.code}\nreturn DynamicAnimation;`;
@@ -115,6 +120,7 @@ export function compileCode(code: string): CompilationResult {
       "Lottie",
       "ThreeCanvas",
       "THREE",
+      "LucideIcons",
       "AbsoluteFill",
       "interpolate",
       "useCurrentFrame",
@@ -122,6 +128,8 @@ export function compileCode(code: string): CompilationResult {
       "spring",
       "Sequence",
       "Img",
+      "Audio",
+      "Easing",
       "useState",
       "useEffect",
       "useMemo",
@@ -161,6 +169,7 @@ export function compileCode(code: string): CompilationResult {
       Lottie,
       ThreeCanvas,
       THREE,
+      LucideIcons,
       AbsoluteFill,
       interpolate,
       useCurrentFrame,
@@ -168,6 +177,8 @@ export function compileCode(code: string): CompilationResult {
       spring,
       Sequence,
       Img,
+      Audio,
+      Easing,
       useState,
       useEffect,
       useMemo,

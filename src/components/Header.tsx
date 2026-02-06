@@ -10,13 +10,13 @@ export function Header({ asLink = false }: HeaderProps) {
     <div className="flex items-center gap-3">
       <img
         src="/logo-white.svg"
-        alt="Remotion"
+        alt="IMSOLD ANIMATOR"
         style={{
           width: 32,
         }}
       />
       <span className="text-xl font-bold text-white font-sans">
-        Remotion - Prompt to Motion Graphics
+        IMSOLD ANIMATOR
       </span>
     </div>
   );

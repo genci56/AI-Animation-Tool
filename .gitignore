@@ -28,6 +28,44 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# AI agent config folders
+.adal/
+.agent/
+.agents/
+.augment/
+.claude/
+.cline/
+.codebuddy/
+.codex/
+.commandcode/
+.continue/
+.crush/
+.cursor/
+.factory/
+.gemini/
+.github/
+.goose/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.mux/
+.neovate/
+.openclaude/
+.opencode/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.vibe/
+.windsurf/
+.zencoder/
+skills/
+
 # vercel
 .vercel
 
@@ -37,3 +75,8 @@ next-env.d.ts
 out/
 .env
 build
+
+# uploaded files (keep .gitkeep)
+/public/uploads/*
+!/public/uploads/.gitkeep
+.vercel

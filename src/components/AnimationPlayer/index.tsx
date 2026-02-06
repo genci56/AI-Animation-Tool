@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useMemo } from "react";
 import { Player, type ErrorFallback, type PlayerRef } from "@remotion/player";
 import { ErrorDisplay, type ErrorType } from "../ErrorDisplay";
 import { RenderControls } from "./RenderControls";
 import { SettingsModal } from "./SettingsModal";
+import { createWrappedComponent } from "./CompositionWrapper";
+import type { Voiceover, CaptionConfig, CaptionsData } from "@/types/voiceover";
 
 const renderErrorFallback: ErrorFallback = ({ error }) => {
   return (
@@ -33,6 +35,10 @@ interface AnimationPlayerProps {
   errorType?: ErrorType;
   code: string;
   onRuntimeError?: (error: string) => void;
+  // Voiceover/caption support
+  voiceover?: Voiceover | null;
+  captionConfig?: CaptionConfig;
+  captions?: CaptionsData | null;
 }
 
 export const AnimationPlayer: React.FC<AnimationPlayerProps> = ({
@@ -47,8 +53,21 @@ export const AnimationPlayer: React.FC<AnimationPlayerProps> = ({
   errorType = "compilation",
   code,
   onRuntimeError,
+  voiceover,
+  captionConfig,
+  captions,
 }) => {
   const playerRef = useRef<PlayerRef>(null);
+
+  // Create wrapped component that includes audio and captions
+  const WrappedComponent = useMemo(() => {
+    if (!Component) return null;
+    // Only wrap if we have voiceover or captions to add
+    if (voiceover || (captionConfig?.enabled && captions)) {
+      return createWrappedComponent(Component);
+    }
+    return Component;
+  }, [Component, voiceover, captionConfig?.enabled, captions]);
 
   // Listen for runtime errors from the Player's error boundary
   useEffect(() => {
@@ -89,10 +108,15 @@ export const AnimationPlayer: React.FC<AnimationPlayerProps> = ({
       return <ErrorDisplay error={error} errorType={errorType} />;
     }
 
-    if (!Component) {
+    if (!WrappedComponent) {
       return (
-        <div className="w-full aspect-video max-h-[calc(100%-80px)] flex justify-center items-center bg-background-elevated rounded-lg overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.5)] text-muted-foreground-dim text-lg font-sans">
-          Select an example to get started
+        <div className="w-full aspect-video max-h-[calc(100%-80px)] flex flex-col justify-center items-center gap-3 bg-background-elevated rounded-lg overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.5)]">
+          <div className="text-muted-foreground text-lg font-sans">
+            Describe your animation
+          </div>
+          <div className="text-muted-foreground-dim text-sm font-sans">
+            Type a prompt in the chat to generate a video
+          </div>
         </div>
       );
     }
@@ -102,12 +126,17 @@ export const AnimationPlayer: React.FC<AnimationPlayerProps> = ({
         <div className="w-full aspect-video max-h-[calc(100%-80px)] rounded-lg overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.5)]">
           <Player
             ref={playerRef}
-            key={Component.toString()}
-            component={Component}
+            key={`${Component?.toString()}-${voiceover?.audioUrl || "no-audio"}`}
+            component={WrappedComponent}
             durationInFrames={durationInFrames}
             fps={fps}
             compositionHeight={1080}
             compositionWidth={1920}
+            inputProps={{
+              voiceover: voiceover || undefined,
+              captionConfig: captionConfig || undefined,
+              captions: captions || undefined,
+            }}
             style={{
               width: "100%",
               height: "100%",
