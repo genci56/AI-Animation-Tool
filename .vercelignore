@@ -1,9 +1,14 @@
 # Ignore local development files
 .agents/
-skills/
 .whisper/
 export/
 public/uploads/
-create-props.js
-*.mjs
 nul
+
+# Ignore local render scripts (but not config.mjs)
+render-*.mjs
+create-props.js
+extract-apple-props.js
+
+# Ignore root skills symlink folder (not src/skills)
+/skills/
